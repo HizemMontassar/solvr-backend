@@ -1,16 +1,21 @@
 const argv = process.argv.slice(2);
 const data = require("./data/data");
 
-if (argv.filter) {
+const argument = argv[0].slice(2);
+if (argument.includes("filter")) {
   const pattern = argv[0].split("=")[1];
   const filteredData = JSON.stringify(filteredAnimals(data, pattern), null, 2);
   console.log(filteredData);
+}
+if (argument.includes("count")) {
+  const countData = JSON.stringify(countChildren(data), null, 2);
+  console.log(countData);
 }
 
 function filteredAnimals(data, pattern) {
   let filteredData = [];
   for (const parent of data) {
-    const filteredGroup = { name: parent.name, people: [] };
+    const filteredParent = { name: parent.name, people: [] };
     for (const people of parent.people) {
       const filteredPeople = { name: people.name, animals: [] };
       for (const animal of people.animals) {
@@ -19,12 +24,37 @@ function filteredAnimals(data, pattern) {
         }
       }
       if (filteredPeople.animals.length > 0) {
-        filteredGroup.people.push(filteredPeople);
+        filteredParent.people.push(filteredPeople);
       }
     }
-    if (filteredGroup.people.length > 0) {
-      filteredData.push(filteredGroup);
+    if (filteredParent.people.length > 0) {
+      filteredData.push(filteredParent);
     }
   }
   return filteredData;
+}
+
+function countChildren(data) {
+  let newData = [];
+  for (const parent of data) {
+    const countParent = {
+      name: "",
+      people: [],
+    };
+    let parentChildrenCount = parent.people.length;
+    for (const people of parent.people) {
+      const countPeople = {
+        name: `${people.name} [${people.animals.length}]`,
+        animals: [],
+      };
+      for (const animal of people.animals) {
+        parentChildrenCount += 1;
+        countPeople.animals.push({ name: animal.name });
+      }
+      countParent.people.push(countPeople);
+      countParent.name = `${parent.name} [${parentChildrenCount}]`;
+    }
+    newData.push(countParent);
+  }
+  return newData;
 }
