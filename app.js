@@ -31,6 +31,9 @@ function filteredAnimals(data, pattern) {
       filteredData.push(filteredParent);
     }
   }
+  if (filteredData.length === 0) {
+    return "No animal matching this pattern";
+  }
   return filteredData;
 }
 
@@ -58,3 +61,6 @@ function countChildren(data) {
   }
   return newData;
 }
+
+module.exports.filteredAnimals = filteredAnimals;
+module.exports.countChildren = countChildren;
