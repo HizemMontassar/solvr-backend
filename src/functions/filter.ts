@@ -1,4 +1,4 @@
-import { Country, People } from "../types";
+import { Country, People } from '../types';
 
 export const filteredAnimals = (
   data: Country[],
@@ -23,7 +23,7 @@ export const filteredAnimals = (
     }
   }
   if (filteredData.length === 0) {
-    return "No animal matching this pattern";
+    return 'No animal matching this pattern';
   }
   return filteredData;
 };
